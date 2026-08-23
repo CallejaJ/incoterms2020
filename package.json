@@ -1,0 +1,15 @@
+{
+  "name": "incoterms2020",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Rumbo — asistente y comparador de Incoterms 2020 para transitarios",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @incoterms/web",
+    "build": "npm run build -w @incoterms/core && npm run build -w @incoterms/web",
+    "test": "npm run test -w @incoterms/core",
+    "typecheck": "tsc -b"
+  }
+}
