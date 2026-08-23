@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rumbo · Incoterms 2020</title>
+<meta name="description" content="Asistente y comparador de Incoterms 2020 para transitarios y usuarios que dominan poco los términos de comercio internacional.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ---------- Tokens: tema claro (por defecto) ---------- */
+:root{
+  --ground:#eef1f4;
+  --surface:#ffffff;
+  --surface-2:#f6f8fa;
+  --ink:#12222e;
+  --ink-soft:#4a5b68;
+  --ink-faint:#7b8894;
+  --line:#d7dde3;
+  --line-strong:#bcc6ce;
+  --brand:#14507d;        /* azul náutico */
+  --brand-ink:#0e3a5c;
+  --seller:#0f8a76;       /* teal — paga el vendedor */
+  --seller-bg:#e2f2ee;
+  --buyer:#c07419;        /* ámbar — paga el comprador */
+  --buyer-bg:#f7ecdc;
+  --risk:#cf4638;         /* rojo señal — transferencia de riesgo */
+  --risk-bg:#fbe6e3;
+  --good:#0f8a76;
+  --shadow:0 1px 2px rgba(18,34,46,.06),0 8px 24px rgba(18,34,46,.06);
+  --radius:10px;
+}
+/* Tema oscuro por preferencia del SO (salvo que se fuerce claro) */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0b1720;
+    --surface:#11222d;
+    --surface-2:#0e1d26;
+    --ink:#e7edf1;
+    --ink-soft:#a7b6c1;
+    --ink-faint:#728490;
+    --line:#233642;
+    --line-strong:#33505f;
+    --brand:#4aa3e0;
+    --brand-ink:#8ccbf3;
+    --seller:#37b89e;
+    --seller-bg:#13332e;
+    --buyer:#e0973f;
+    --buyer-bg:#33260f;
+    --risk:#ec6a5c;
+    --risk-bg:#3a1c19;
+    --good:#37b89e;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+}
+/* Toggle explícito oscuro */
+:root[data-theme="dark"]{
+  --ground:#0b1720; --surface:#11222d; --surface-2:#0e1d26;
+  --ink:#e7edf1; --ink-soft:#a7b6c1; --ink-faint:#728490;
+  --line:#233642; --line-strong:#33505f;
+  --brand:#4aa3e0; --brand-ink:#8ccbf3;
+  --seller:#37b89e; --seller-bg:#13332e;
+  --buyer:#e0973f; --buyer-bg:#33260f;
+  --risk:#ec6a5c; --risk-bg:#3a1c19; --good:#37b89e;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.55;
+}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",monospace}
+.num{font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace}
+a{color:var(--brand)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+/* ---------- Header ---------- */
+header{
+  position:sticky;top:0;z-index:20;background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+.bar{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(150deg,var(--brand),var(--brand-ink));
+  display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.brand b{font-family:"Archivo";font-weight:800;font-size:17px;letter-spacing:.2px}
+.brand span{display:block;font-size:11px;color:var(--ink-faint);letter-spacing:.14em;text-transform:uppercase;margin-top:-2px}
+.controls{display:flex;align-items:center;gap:8px}
+.seg{display:flex;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:2px}
+.seg button{border:0;background:transparent;color:var(--ink-soft);padding:6px 11px;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.icon-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);width:36px;height:34px;border-radius:8px;cursor:pointer;font-size:15px}
+.icon-btn:hover{color:var(--ink)}
+
+/* Tabs */
+nav.tabs{max-width:1120px;margin:0 auto;padding:0 20px;display:flex;gap:4px}
+nav.tabs button{
+  border:0;background:transparent;color:var(--ink-faint);font-weight:600;font-size:14px;
+  padding:12px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brand)}
+
+/* ---------- Layout ---------- */
+main{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.pad{padding:22px}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);font-weight:600;font-family:"IBM Plex Mono"}
+.lead{color:var(--ink-soft);max-width:62ch}
+.hidden{display:none!important}
+
+/* ---------- Asistente ---------- */
+.wizard-head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.wizard-head h1{font-size:26px;font-weight:800;letter-spacing:-.01em}
+.progress{display:flex;gap:6px;margin:18px 0 4px}
+.progress i{height:4px;flex:1;background:var(--line);border-radius:2px}
+.progress i.on{background:var(--brand)}
+.q{margin-top:22px}
+.q h2{font-size:19px;font-weight:700;margin-bottom:4px}
+.q p.hint{color:var(--ink-faint);font-size:13.5px;margin:0 0 16px}
+.options{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.opt{
+  text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;
+  padding:14px 15px;cursor:pointer;transition:border-color .12s,background .12s;color:var(--ink)}
+.opt:hover{border-color:var(--line-strong)}
+.opt[aria-pressed="true"]{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--surface))}
+.opt b{display:block;font-size:14.5px;font-weight:600;margin-bottom:3px}
+.opt small{color:var(--ink-faint);font-size:12.5px;line-height:1.4}
+.wizard-nav{display:flex;justify-content:space-between;margin-top:24px;gap:10px}
+.btn{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-weight:600;font-size:14px;
+  padding:10px 18px;border-radius:9px;cursor:pointer}
+.btn:hover{border-color:var(--line-strong)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* Recomendación */
+.reco-rules{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:6px}
+.reco-card{border:1.5px solid var(--line);border-radius:12px;padding:16px;background:var(--surface)}
+.reco-card.best{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 16%,transparent)}
+.reco-card .tag{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--brand);
+  padding:3px 8px;border-radius:20px;display:inline-block;margin-bottom:10px}
+.reco-card .tag.alt{background:var(--ink-faint)}
+.reco-card h3{font-family:"IBM Plex Mono";font-size:22px;font-weight:600;letter-spacing:.02em}
+.reco-card .full{color:var(--ink-soft);font-size:12.5px;margin:2px 0 10px}
+.reco-card .why{font-size:13.5px;color:var(--ink);line-height:1.5}
+
+/* ---------- Cadena de costes ---------- */
+.chain-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--ink-soft);margin:2px 0 14px}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+.dot.s{background:var(--seller)}.dot.b{background:var(--buyer)}
+.flag-key{width:2px;height:14px;background:var(--risk);display:inline-block;position:relative}
+.chain-scroll{overflow-x:auto;padding-bottom:6px}
+.chain{display:flex;align-items:stretch;min-width:760px;gap:0}
+.node{flex:1;min-width:66px;position:relative;padding:0 3px}
+.node .box{border:1px solid var(--line);border-top:3px solid var(--seller);border-radius:8px;background:var(--surface-2);
+  padding:8px 6px;height:100%;display:flex;flex-direction:column;gap:3px;min-height:74px}
+.node.buyer .box{border-top-color:var(--buyer)}
+.node .sid{font-family:"IBM Plex Mono";font-size:11px;font-weight:600;color:var(--ink-faint)}
+.node .lab{font-size:11px;line-height:1.25;color:var(--ink)}
+.node .cost{margin-top:auto;font-family:"IBM Plex Mono";font-size:11px;font-weight:600}
+.node.seller .cost{color:var(--seller)}
+.node.buyer .cost{color:var(--buyer)}
+.gate{flex:0 0 2px;background:var(--risk);position:relative;margin:0 4px;border-radius:2px}
+.gate::before{content:"⚑ riesgo";position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;font-family:"IBM Plex Mono";font-size:10px;font-weight:600;color:#fff;background:var(--risk);
+  padding:2px 6px;border-radius:20px}
+
+/* ---------- Comparador ---------- */
+.cmp-grid{display:grid;gap:22px;grid-template-columns:320px 1fr}
+@media(max-width:860px){.cmp-grid{grid-template-columns:1fr}.cmp-side{order:2}}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:4px}
+.field input{width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+  border-radius:8px;padding:8px 10px;font-family:"IBM Plex Mono";font-size:13px}
+.field input:focus{border-color:var(--brand);outline:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.subhead{font-family:"Archivo";font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--ink-faint);margin:16px 0 8px}
+details.seg-costs summary{cursor:pointer;font-size:13px;color:var(--brand);font-weight:600;padding:6px 0}
+.rolebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.rulepick{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 18px}
+.rulepick button{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);
+  font-family:"IBM Plex Mono";font-size:12px;font-weight:600;padding:5px 9px;border-radius:7px;cursor:pointer}
+.rulepick button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.rulepick button:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+table.cmp{width:100%;border-collapse:collapse;font-size:13.5px}
+table.cmp th,table.cmp td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+table.cmp thead th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);font-weight:600}
+table.cmp tbody tr{cursor:pointer}
+table.cmp tbody tr:hover{background:var(--surface-2)}
+table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surface))}
+.rulecell{display:flex;align-items:center;gap:8px}
+.rulecell b{font-family:"IBM Plex Mono";font-size:14px}
+.rulecell small{color:var(--ink-faint);font-size:11px}
+.best-pill{font-size:10px;font-weight:700;color:#fff;background:var(--good);padding:2px 7px;border-radius:20px;letter-spacing:.04em}
+.yourcost{font-weight:600}
+.riskcell{font-size:12px;color:var(--risk);font-weight:600}
+.callout{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--brand);
+  border-radius:8px;padding:12px 14px;font-size:13px;color:var(--ink-soft);margin:16px 0}
+.callout b{color:var(--ink)}
+
+/* Glosario / tooltip */
+.term{border-bottom:1px dotted var(--ink-faint);cursor:help}
+footer{max-width:1120px;margin:0 auto;padding:0 20px 60px;color:var(--ink-faint);font-size:12px}
+.disclaimer{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;line-height:1.6}
+.expert-only{display:none}
+body.expert .expert-only{display:revert}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">
+      <div class="logo">🧭</div>
+      <div><b>Rumbo</b><span>Incoterms 2020</span></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Nivel de detalle">
+        <button id="mode-simple" aria-pressed="true">Simple</button>
+        <button id="mode-expert" aria-pressed="false">Experto</button>
+      </div>
+      <button class="icon-btn" id="theme" title="Cambiar tema" aria-label="Cambiar tema">◐</button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" id="tab-asistente">Asistente guiado</button>
+    <button role="tab" aria-selected="false" id="tab-comparador">Comparador</button>
+    <button role="tab" aria-selected="false" id="tab-guia">Las 11 reglas</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ ASISTENTE ============ -->
+  <section id="view-asistente">
+    <div class="wizard-head">
+      <div>
+        <div class="eyebrow">Asistente</div>
+        <h1>¿Qué Incoterm te conviene?</h1>
+        <p class="lead">Responde cuatro preguntas en lenguaje sencillo. No hace falta que conozcas los términos: al final te recomendamos la opción adecuada y te la explicamos.</p>
+      </div>
+    </div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="panel pad" id="wizard"></div>
+  </section>
+
+  <!-- ============ COMPARADOR ============ -->
+  <section id="view-comparador" class="hidden">
+    <div class="eyebrow">Comparador</div>
+    <h1 style="font-size:24px;font-weight:800;margin:2px 0 6px">Compara costes y riesgo</h1>
+    <p class="lead" style="margin-bottom:20px">Introduce los datos del envío y elige qué reglas comparar. Verás cuánto paga cada parte, quién asume qué y dónde se transfiere el riesgo.</p>
+    <div class="cmp-grid">
+      <div class="cmp-side panel pad">
+        <div class="subhead" style="margin-top:0">Datos del envío</div>
+        <div class="field"><label>Valor de la mercancía (€)</label><input class="num" id="in-value" value="20000"></div>
+        <div class="grid2">
+          <div class="field"><label>Arancel destino (%)</label><input class="num" id="in-duty" value="4"></div>
+          <div class="field"><label>IVA import. (%)</label><input class="num" id="in-vat" value="21"></div>
+        </div>
+        <div class="field"><label>Modo de transporte</label>
+          <input id="in-mode" value="Marítimo" readonly style="cursor:default">
+        </div>
+        <details class="seg-costs">
+          <summary>Costes por tramo (avanzado)</summary>
+          <div id="seg-inputs" style="margin-top:8px"></div>
+        </details>
+        <div class="callout" style="margin-bottom:0">El <b>coste total</b> de la operación es casi el mismo con cualquier Incoterm. Lo que cambia es <b>quién lo paga</b> y <b>quién asume el riesgo</b>.</div>
+      </div>
+
+      <div>
+        <div class="rolebar">
+          <span style="font-size:12px;font-weight:600;color:var(--ink-soft)">Analizo desde el lado del:</span>
+          <div class="seg" role="group" aria-label="Rol">
+            <button id="role-seller" aria-pressed="true">Vendedor / Exportador</button>
+            <button id="role-buyer" aria-pressed="false">Comprador / Importador</button>
+          </div>
+        </div>
+        <div class="subhead" style="margin-top:0">Reglas a comparar</div>
+        <div class="rulepick" id="rulepick"></div>
+        <div class="panel" style="overflow:hidden">
+          <div class="chain-scroll"><table class="cmp"><thead><tr>
+            <th>Regla</th><th class="yourcost">Tu coste</th><th class="expert-only">Vendedor</th><th class="expert-only">Comprador</th><th>Total oper.</th><th>Riesgo pasa en</th>
+          </tr></thead><tbody id="cmp-body"></tbody></table></div>
+        </div>
+        <div class="callout" id="cmp-insight"></div>
+        <div class="subhead">Cadena de costes · <span id="chain-rule" class="mono"></span></div>
+        <div class="chain-legend">
+          <span class="chip"><span class="dot s"></span> Paga el vendedor</span>
+          <span class="chip"><span class="dot b"></span> Paga el comprador</span>
+          <span class="chip"><span class="flag-key"></span> El riesgo pasa al comprador</span>
+        </div>
+        <div class="chain-scroll"><div class="chain" id="chain"></div></div>
+        <p id="chain-note" style="font-size:12.5px;color:var(--ink-faint);margin-top:12px"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GUÍA 11 REGLAS ============ -->
+  <section id="view-guia" class="hidden">
+    <div class="eyebrow">Referencia</div>
+    <h1 style="font-size:24px;font-weight:800;margin:2px 0 6px">Las 11 reglas Incoterms 2020</h1>
+    <p class="lead" style="margin-bottom:20px">De menor a mayor responsabilidad del vendedor. Pasa el ratón por los términos técnicos para ver su definición.</p>
+    <div class="reco-rules" id="guia-list"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="disclaimer">
+    <b>Rumbo</b> es un prototipo educativo y de asesoramiento basado en las reglas <span class="term" title="International Chamber of Commerce — quien publica las Incoterms">ICC</span> Incoterms® 2020. Las cifras de aranceles e impuestos son estimaciones configurables: la base imponible y los tipos varían por país y por partida arancelaria. No sustituye el contrato de compraventa ni el asesoramiento profesional. «Incoterms» es marca registrada de la ICC.
+  </div>
+</footer>
+
+<script>
+/* ================= DATOS DEL DOMINIO ================= */
+const SEG = [
+  {id:"S1", short:"Embalaje", full:"Embalaje y verificación de exportación", def:"Preparar, marcar y comprobar la mercancía para exportar.", key:"pack"},
+  {id:"S2", short:"Carga origen", full:"Carga en las instalaciones del vendedor", def:"Subir la mercancía al primer vehículo en origen.", key:"load"},
+  {id:"S3", short:"Interior origen", full:"Transporte interior en origen (pre-carriage)", def:"Del almacén del vendedor a la terminal o puerto de salida.", key:"pre"},
+  {id:"S4", short:"Aduana export.", full:"Despacho de exportación", def:"Trámites y costes de aduana para sacar la mercancía del país.", key:"exp"},
+  {id:"S5", short:"THC origen", full:"Manipulación en terminal de origen / carga a bordo", def:"THC = Terminal Handling Charges: manipulación en la terminal de salida y, en marítimo, carga al buque.", key:"thco"},
+  {id:"S6", short:"Flete", full:"Flete principal (transporte internacional)", def:"El transporte principal entre países (barco, avión, camión).", key:"freight"},
+  {id:"S7", short:"Seguro", full:"Seguro del transporte principal", def:"Cubre pérdida o daño durante el transporte principal. Solo CIF y CIP obligan al vendedor a contratarlo.", key:"ins"},
+  {id:"S8", short:"THC destino", full:"Manipulación en terminal de destino", def:"Descarga del medio principal y manipulación en la terminal de llegada.", key:"thcd"},
+  {id:"S9", short:"Aduana import.", full:"Despacho de importación + aranceles + IVA", def:"Trámites de importación y pago de derechos arancelarios e impuestos en destino.", key:"imp"},
+  {id:"S10", short:"Interior destino", full:"Transporte interior en destino (on-carriage)", def:"De la terminal de llegada al lugar final acordado.", key:"post"},
+  {id:"S11", short:"Descarga", full:"Descarga en destino final", def:"Bajar la mercancía en el punto de entrega final.", key:"unload"}
+];
+// payer: "S" vendedor, "B" comprador. risk = nº de tramos (por posición) tras los que el riesgo es del comprador.
+const RULES = [
+  {code:"EXW", name:"Ex Works / En fábrica", mode:"any", level:0, risk:1,
+   pay:["S","B","B","B","B","B","B","B","B","B","B"],
+   plain:"Entregas la mercancía en tu propia fábrica o almacén. A partir de ahí, todo (incluida la aduana de exportación) corre por cuenta del comprador.",
+   mainCarriage:"buyer", importer:"buyer", insurer:"buyer"},
+  {code:"FCA", name:"Free Carrier / Franco transportista", mode:"any", level:1, risk:4,
+   pay:["S","S","S","S","B","B","B","B","B","B","B"],
+   plain:"Entregas la mercancía despachada de exportación al transportista que designa el comprador. El transporte principal ya es cosa suya.",
+   mainCarriage:"buyer", importer:"buyer", insurer:"buyer"},
+  {code:"FAS", name:"Free Alongside Ship / Franco al costado", mode:"sea", level:2, risk:4,
+   pay:["S","S","S","S","B","B","B","B","B","B","B"],
+   plain:"Dejas la mercancía al costado del buque en el puerto de salida. La carga a bordo y todo lo demás es del comprador.",
+   mainCarriage:"buyer", importer:"buyer", insurer:"buyer"},
+  {code:"FOB", name:"Free On Board / Franco a bordo", mode:"sea", level:3, risk:5,
+   pay:["S","S","S","S","S","B","B","B","B","B","B"],
+   plain:"Entregas la mercancía cargada a bordo del buque. Desde ese momento el flete, el seguro y el riesgo son del comprador.",
+   mainCarriage:"buyer", importer:"buyer", insurer:"buyer"},
+  {code:"CFR", name:"Cost and Freight / Coste y flete", mode:"sea", level:4, risk:5,
+   pay:["S","S","S","S","S","S","B","B","B","B","B"],
+   plain:"Pagas el flete hasta el puerto de destino, pero el riesgo pasa al comprador al cargar en el barco en origen. (¡Ojo a este desfase!)",
+   mainCarriage:"seller", importer:"buyer", insurer:"buyer"},
+  {code:"CIF", name:"Cost, Insurance and Freight / Coste, seguro y flete", mode:"sea", level:5, risk:5,
+   pay:["S","S","S","S","S","S","S","B","B","B","B"], insMandatory:"ICC C",
+   plain:"Como CFR pero además contratas un seguro (cobertura mínima ICC C). El riesgo igualmente pasa al comprador al cargar a bordo en origen.",
+   mainCarriage:"seller", importer:"buyer", insurer:"seller"},
+  {code:"CPT", name:"Carriage Paid To / Transporte pagado hasta", mode:"any", level:4, risk:4,
+   pay:["S","S","S","S","S","S","B","B","B","B","B"],
+   plain:"Pagas el transporte hasta el destino acordado, pero el riesgo pasa al comprador al entregar la mercancía al primer transportista. (Desfase coste↔riesgo.)",
+   mainCarriage:"seller", importer:"buyer", insurer:"buyer"},
+  {code:"CIP", name:"Carriage and Insurance Paid To / Transporte y seguro pagados", mode:"any", level:5, risk:4,
+   pay:["S","S","S","S","S","S","S","B","B","B","B"], insMandatory:"ICC A",
+   plain:"Como CPT pero además contratas un seguro con cobertura amplia (ICC A). El riesgo pasa al comprador al entregar al primer transportista.",
+   mainCarriage:"seller", importer:"buyer", insurer:"seller"},
+  {code:"DAP", name:"Delivered at Place / Entregada en lugar", mode:"any", level:6, risk:10,
+   pay:["S","S","S","S","S","S","S","S","B","S","B"],
+   plain:"Llevas la mercancía hasta el lugar de destino, lista para descargar. El comprador solo se encarga de la aduana de importación y de descargar.",
+   mainCarriage:"seller", importer:"buyer", insurer:"seller"},
+  {code:"DPU", name:"Delivered at Place Unloaded / Entregada descargada", mode:"any", level:7, risk:11,
+   pay:["S","S","S","S","S","S","S","S","B","S","S"],
+   plain:"Como DAP pero además descargas la mercancía en destino. Es la única regla en la que el vendedor descarga. La importación sigue siendo del comprador.",
+   mainCarriage:"seller", importer:"buyer", insurer:"seller"},
+  {code:"DDP", name:"Delivered Duty Paid / Entregada derechos pagados", mode:"any", level:8, risk:10,
+   pay:["S","S","S","S","S","S","S","S","S","S","B"],
+   plain:"Máxima responsabilidad del vendedor: entregas en destino con todo pagado, incluidos los aranceles e impuestos de importación. El comprador solo descarga.",
+   mainCarriage:"seller", importer:"seller", insurer:"seller"}
+];
+const RISK_LABEL = {
+  EXW:"las instalaciones del vendedor (sin cargar)", FCA:"la entrega al transportista en origen",
+  FAS:"el costado del buque en origen", FOB:"a bordo del buque en origen",
+  CFR:"a bordo del buque en origen", CIF:"a bordo del buque en origen",
+  CPT:"la entrega al primer transportista", CIP:"la entrega al primer transportista",
+  DAP:"el lugar de destino (sin descargar)", DPU:"el lugar de destino, ya descargada",
+  DDP:"el lugar de destino (sin descargar)"
+};
+// costes por defecto (€) por tramo
+const DEFAULT_COSTS = {S1:150,S2:80,S3:350,S4:120,S5:220,S6:1400,S7:90,S8:240,S9:160,S10:400,S11:90};
+
+/* ================= ESTADO ================= */
+const state = {
+  costs:{...DEFAULT_COSTS}, value:20000, duty:4, vat:21, mode:"sea",
+  role:"seller", selected:["EXW","FOB","CIF","DDP"], chainRule:"CIF",
+  answers:{}, step:0
+};
+const fmt = n => (Math.round(n)).toLocaleString("es-ES")+" €";
+const $ = s => document.querySelector(s);
+
+/* ================= MOTOR DE CÁLCULO ================= */
+function dutyAndVat(){
+  // Base tipo CIF: valor + flete + seguro. Simplificación configurable.
+  const base = state.value + state.costs.S6 + state.costs.S7;
+  const arancel = base * state.duty/100;
+  const iva = (base + arancel) * state.vat/100;
+  return {arancel, iva};
+}
+function computeRule(code){
+  const r = RULES.find(x=>x.code===code);
+  const {arancel, iva} = dutyAndVat();
+  let seller=0, buyer=0;
+  SEG.forEach((s,i)=>{
+    let c = state.costs[s.id];
+    if(s.id==="S9") c += arancel + iva;          // aduana importación incluye aranceles+IVA
+    if(r.pay[i]==="S") seller+=c; else buyer+=c;
+  });
+  return {code, seller, buyer, total:seller+buyer, rule:r};
+}
+function computeAll(){ return state.selected.map(computeRule); }
+
+/* ================= ASISTENTE ================= */
+const QUESTIONS = [
+  {key:"transport", q:"¿Cómo viajará la mercancía?", hint:"Algunas reglas solo valen para transporte marítimo.",
+   opts:[
+    {v:"sea", b:"Barco (marítimo)", s:"Contenedor o carga por mar / vía navegable"},
+    {v:"air", b:"Avión (aéreo)", s:"Carga aérea"},
+    {v:"road", b:"Camión / tren (terrestre)", s:"Carretera o ferrocarril"},
+    {v:"multi", b:"Combinado (multimodal)", s:"Varios modos, contenedor puerta a puerta"}
+   ]},
+  {key:"carriage", q:"¿Quién quieres que organice y pague el transporte internacional?", hint:"El trayecto principal entre países.",
+   opts:[
+    {v:"buyer", b:"El comprador", s:"Yo me desentiendo del transporte principal"},
+    {v:"seller", b:"Yo (el vendedor)", s:"Lo contrato y lo pago yo"},
+    {v:"any", b:"No lo tengo claro", s:"Muéstrame las dos opciones"}
+   ]},
+  {key:"responsibility", q:"¿Hasta dónde quieres asumir la responsabilidad y el riesgo?", hint:"Cuanto más lejos, más control pero más obligaciones.",
+   opts:[
+    {v:"min", b:"Lo mínimo, en mi país", s:"Que el comprador se ocupe cuanto antes"},
+    {v:"onboard", b:"Hasta cargar el transporte", s:"Entrego cargado en el puerto/terminal"},
+    {v:"paidto", b:"Pago el viaje, sin riesgo en destino", s:"Cubro flete (y quizá seguro) hasta destino"},
+    {v:"destination", b:"Hasta el país de destino", s:"Entrego allí, listo para descargar"}
+   ]},
+  {key:"import", q:"¿Quién se encargará de la aduana de importación y de pagar los aranceles en destino?", hint:"Solo DDP pone esto del lado del vendedor.",
+   opts:[
+    {v:"buyer", b:"El comprador", s:"Lo normal en la mayoría de operaciones"},
+    {v:"seller", b:"Yo, el vendedor (todo incluido)", s:"Entrega con derechos pagados (DDP)"}
+   ]}
+];
+function scoreRules(a){
+  const cands = RULES.filter(r=> r.mode==="any" || (r.mode==="sea" && a.transport==="sea"));
+  return cands.map(r=>{
+    let sc=0;
+    // organizar transporte principal
+    if(a.carriage==="seller" && r.mainCarriage==="seller") sc+=3;
+    if(a.carriage==="buyer" && r.mainCarriage==="buyer") sc+=3;
+    if(a.carriage==="any") sc+=1;
+    // nivel de responsabilidad
+    const lv=r.level;
+    if(a.responsibility==="min") sc += lv<=1?3:(lv<=2?1:-2);
+    if(a.responsibility==="onboard") sc += (lv>=1&&lv<=3)?3:(lv===0?0:-1);
+    if(a.responsibility==="paidto") sc += (lv>=4&&lv<=5)?3:-1;
+    if(a.responsibility==="destination") sc += (lv>=6&&lv<=7)?3:(lv===8?2:-2);
+    // importación
+    if(a.import==="seller") sc += (r.code==="DDP")?4:-3;
+    if(a.import==="buyer") sc += (r.code==="DDP")?-3:1;
+    // preferencia marítima concreta si eligió barco y bajo nivel
+    if(a.transport==="sea" && r.mode==="sea") sc+=0.5;
+    return {r, sc};
+  }).sort((x,y)=> y.sc-x.sc);
+}
+function renderWizard(){
+  const w=$("#wizard"), prog=$("#progress");
+  prog.innerHTML = QUESTIONS.map((_,i)=>`<i class="${i<=state.step&&state.step<QUESTIONS.length?'on':(state.step>=QUESTIONS.length?'on':'')} ${i<state.step||state.step>=QUESTIONS.length?'on':''}"></i>`).join("");
+  // simpler progress fill
+  prog.querySelectorAll("i").forEach((el,i)=> el.classList.toggle("on", i<state.step || state.step>=QUESTIONS.length));
+
+  if(state.step < QUESTIONS.length){
+    const Q=QUESTIONS[state.step];
+    const cur=state.answers[Q.key];
+    w.innerHTML = `
+      <div class="q">
+        <h2>${Q.q}</h2><p class="hint">${Q.hint}</p>
+        <div class="options">${Q.opts.map(o=>`
+          <button class="opt" data-v="${o.v}" aria-pressed="${cur===o.v}">
+            <b>${o.b}</b><small>${o.s}</small></button>`).join("")}</div>
+        <div class="wizard-nav">
+          <button class="btn" id="w-back" ${state.step===0?"disabled":""}>← Atrás</button>
+          <button class="btn primary" id="w-next" ${cur?"":"disabled"}>${state.step===QUESTIONS.length-1?"Ver recomendación":"Siguiente →"}</button>
+        </div>
+      </div>`;
+    w.querySelectorAll(".opt").forEach(b=> b.onclick=()=>{
+      state.answers[Q.key]=b.dataset.v;
+      if(Q.key==="transport") state.mode=b.dataset.v;
+      renderWizard();
+    });
+    $("#w-back").onclick=()=>{state.step--;renderWizard();};
+    $("#w-next").onclick=()=>{state.step++;renderWizard();};
+  } else {
+    const ranked=scoreRules(state.answers);
+    const best=ranked[0], alts=ranked.slice(1,3);
+    const card=(x,isBest)=>`
+      <div class="reco-card ${isBest?'best':''}">
+        <span class="tag ${isBest?'':'alt'}">${isBest?'Recomendado':'Alternativa'}</span>
+        <h3>${x.r.code}</h3>
+        <div class="full">${x.r.name}</div>
+        <div class="why">${x.r.plain}</div>
+      </div>`;
+    w.innerHTML=`
+      <div class="q" style="margin-top:0">
+        <div class="eyebrow">Resultado</div>
+        <h2 style="font-size:22px">Tu mejor opción: <span class="mono">${best.r.code}</span></h2>
+        <p class="hint">Según tus respuestas. Puedes llevar estas reglas al comparador para ver los números.</p>
+        <div class="reco-rules">${card(best,true)}${alts.map(a=>card(a,false)).join("")}</div>
+        <div class="wizard-nav">
+          <button class="btn" id="w-restart">↺ Empezar de nuevo</button>
+          <button class="btn primary" id="w-compare">Comparar estas reglas →</button>
+        </div>
+      </div>`;
+    $("#w-restart").onclick=()=>{state.step=0;state.answers={};renderWizard();};
+    $("#w-compare").onclick=()=>{
+      state.selected=[best.r.code,...alts.map(a=>a.r.code)];
+      state.chainRule=best.r.code;
+      if(state.answers.carriage==="buyer") state.role="seller";
+      switchTab("comparador");
+      renderComparator();
+    };
+  }
+}
+
+/* ================= COMPARADOR ================= */
+function renderSegInputs(){
+  const el=$("#seg-inputs");
+  el.innerHTML = SEG.map(s=>`
+    <div class="field" style="margin-bottom:8px">
+      <label>${s.id} · ${s.short}</label>
+      <input class="num seg-in" data-id="${s.id}" value="${state.costs[s.id]}">
+    </div>`).join("");
+  el.querySelectorAll(".seg-in").forEach(inp=> inp.oninput=()=>{
+    const v=parseFloat(inp.value)||0; state.costs[inp.dataset.id]=v; renderComparator();
+  });
+}
+function renderRulePick(){
+  const el=$("#rulepick");
+  el.innerHTML = RULES.map(r=>{
+    const disabled = r.mode==="sea" && state.mode!=="sea";
+    return `<button data-code="${r.code}" aria-pressed="${state.selected.includes(r.code)}" ${disabled?"disabled title='Solo transporte marítimo'":""}>${r.code}</button>`;
+  }).join("");
+  el.querySelectorAll("button").forEach(b=> b.onclick=()=>{
+    const c=b.dataset.code;
+    if(state.selected.includes(c)) state.selected=state.selected.filter(x=>x!==c);
+    else state.selected.push(c);
+    if(!state.selected.includes(state.chainRule)) state.chainRule=state.selected[0];
+    renderComparator();
+  });
+}
+function renderTable(){
+  const rows=computeAll();
+  const yourKey=state.role==="seller"?"seller":"buyer";
+  const sorted=[...rows].sort((a,b)=> a[yourKey]-b[yourKey]);
+  const bestVal = sorted.length? sorted[0][yourKey] : 0;
+  $("#cmp-body").innerHTML = sorted.map(row=>{
+    const r=row.rule;
+    const isBest = row[yourKey]===bestVal;
+    return `<tr data-code="${row.code}" class="${row.code===state.chainRule?'sel':''}">
+      <td><div class="rulecell"><b>${row.code}</b>${isBest?'<span class="best-pill">Menor coste</span>':''}</div>
+          <small>${r.name.split(" / ")[0]}</small></td>
+      <td class="yourcost num">${fmt(row[yourKey])}</td>
+      <td class="expert-only num">${fmt(row.seller)}</td>
+      <td class="expert-only num">${fmt(row.buyer)}</td>
+      <td class="num">${fmt(row.total)}</td>
+      <td class="riskcell">${RISK_LABEL[row.code]}</td>
+    </tr>`;
+  }).join("");
+  $("#cmp-body").querySelectorAll("tr").forEach(tr=> tr.onclick=()=>{
+    state.chainRule=tr.dataset.code; renderComparator();
+  });
+  // insight
+  if(sorted.length){
+    const cheapest=sorted[0], dearest=sorted[sorted.length-1];
+    const who=state.role==="seller"?"vendedor":"comprador";
+    const other=state.role==="seller"?"comprador":"vendedor";
+    $("#cmp-insight").innerHTML=`Para el <b>${who}</b>, la regla más económica de tu selección es <b class="mono">${cheapest.code}</b> (${fmt(cheapest[yourKey])}). Pero recuerda: lo que te ahorras suele trasladarse al <b>${other}</b> en coste, trabajo o riesgo. La decisión también depende de <b>quién controla mejor cada tramo</b>.`;
+  }
+}
+function renderChain(){
+  const r=RULES.find(x=>x.code===state.chainRule);
+  if(!r){$("#chain").innerHTML="";return;}
+  $("#chain-rule").textContent = r.code+" · "+r.name.split(" / ")[0];
+  const {arancel,iva}=dutyAndVat();
+  let html="";
+  SEG.forEach((s,i)=>{
+    if(i===r.risk){ html+=`<div class="gate" title="Aquí el riesgo pasa del vendedor al comprador"></div>`; }
+    const payer=r.pay[i];
+    let cost=state.costs[s.id]; if(s.id==="S9") cost+=arancel+iva;
+    html+=`<div class="node ${payer==='S'?'seller':'buyer'}">
+      <div class="box">
+        <span class="sid">${s.id}</span>
+        <span class="lab">${s.short}</span>
+        <span class="cost num">${fmt(cost)}</span>
+      </div></div>`;
+  });
+  if(r.risk>=SEG.length){ html+=`<div class="gate" title="El riesgo pasa al final, una vez descargada"></div>`; }
+  $("#chain").innerHTML=html;
+  const insTxt = r.insMandatory? ` El vendedor debe contratar seguro (cobertura ${r.insMandatory}).` : "";
+  $("#chain-note").innerHTML = `Con <b class="mono">${r.code}</b>, el riesgo de pérdida o daño pasa al comprador en <b>${RISK_LABEL[r.code]}</b>.${insTxt}`;
+}
+function renderComparator(){
+  $("#in-mode").value = {sea:"Marítimo",air:"Aéreo",road:"Terrestre",multi:"Multimodal"}[state.mode]||"Marítimo";
+  renderRulePick(); renderTable(); renderChain();
+}
+
+/* ================= GUÍA ================= */
+function renderGuia(){
+  $("#guia-list").innerHTML = [...RULES].sort((a,b)=>a.level-b.level).map(r=>`
+    <div class="reco-card">
+      <h3>${r.code}</h3>
+      <div class="full">${r.name}</div>
+      <div class="why">${r.plain}</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--ink-faint)">
+        <span class="mono">${r.mode==='sea'?'Solo marítimo':'Cualquier modo'}</span> ·
+        Riesgo: <span style="color:var(--risk);font-weight:600">${RISK_LABEL[r.code]}</span>
+        ${r.insMandatory?` · Seguro oblig. (${r.insMandatory})`:""}
+      </div>
+    </div>`).join("");
+}
+
+/* ================= NAVEGACIÓN / CONTROLES ================= */
+function switchTab(name){
+  ["asistente","comparador","guia"].forEach(n=>{
+    $("#view-"+n).classList.toggle("hidden", n!==name);
+    $("#tab-"+n).setAttribute("aria-selected", n===name);
+  });
+}
+$("#tab-asistente").onclick=()=>switchTab("asistente");
+$("#tab-comparador").onclick=()=>{switchTab("comparador");renderComparator();};
+$("#tab-guia").onclick=()=>{switchTab("guia");renderGuia();};
+
+$("#role-seller").onclick=()=>{state.role="seller";$("#role-seller").setAttribute("aria-pressed","true");$("#role-buyer").setAttribute("aria-pressed","false");renderTable();};
+$("#role-buyer").onclick=()=>{state.role="buyer";$("#role-buyer").setAttribute("aria-pressed","true");$("#role-seller").setAttribute("aria-pressed","false");renderTable();};
+
+$("#mode-simple").onclick=()=>{document.body.classList.remove("expert");$("#mode-simple").setAttribute("aria-pressed","true");$("#mode-expert").setAttribute("aria-pressed","false");};
+$("#mode-expert").onclick=()=>{document.body.classList.add("expert");$("#mode-expert").setAttribute("aria-pressed","true");$("#mode-simple").setAttribute("aria-pressed","false");};
+
+$("#in-value").oninput=e=>{state.value=parseFloat(e.target.value)||0;renderComparator();};
+$("#in-duty").oninput=e=>{state.duty=parseFloat(e.target.value)||0;renderComparator();};
+$("#in-vat").oninput=e=>{state.vat=parseFloat(e.target.value)||0;renderComparator();};
+
+const themeBtn=$("#theme");
+themeBtn.onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const dark = cur? cur==="dark" : matchMedia("(prefers-color-scheme:dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark?"light":"dark");
+};
+
+/* ================= INIT ================= */
+renderSegInputs();
+renderWizard();
+renderComparator();
+</script>
+</body>
+</html>
