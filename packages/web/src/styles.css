@@ -183,4 +183,7 @@ table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surfac
 .term{border-bottom:1px dotted var(--ink-faint);cursor:help}
 footer{max-width:1120px;margin:0 auto;padding:0 20px 60px;color:var(--ink-faint);font-size:12px}
 .disclaimer{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;line-height:1.6}
+.site-footer{margin-top:14px;display:flex;justify-content:center;text-align:center;font-size:12px;color:var(--ink-faint)}
+.site-footer a{color:var(--brand);text-decoration:none;font-weight:600}
+.site-footer a:hover{text-decoration:underline}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}

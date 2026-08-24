@@ -235,6 +235,9 @@ table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surfac
 .term{border-bottom:1px dotted var(--ink-faint);cursor:help}
 footer{max-width:1120px;margin:0 auto;padding:0 20px 60px;color:var(--ink-faint);font-size:12px}
 .disclaimer{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;line-height:1.6}
+.site-footer{margin-top:14px;display:flex;justify-content:center;text-align:center;font-size:12px;color:var(--ink-faint)}
+.site-footer a{color:var(--brand);text-decoration:none;font-weight:600}
+.site-footer a:hover{text-decoration:underline}
 .expert-only{display:none}
 body.expert .expert-only{display:revert}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -345,6 +348,9 @@ body.expert .expert-only{display:revert}
 <footer>
   <div class="disclaimer">
     <b>Rumbo</b> es un prototipo educativo y de asesoramiento basado en las reglas <span class="term" title="International Chamber of Commerce — quien publica las Incoterms">ICC</span> Incoterms® 2020. Las cifras de aranceles e impuestos son estimaciones configurables: la base imponible y los tipos varían por país y por partida arancelaria. No sustituye el contrato de compraventa ni el asesoramiento profesional. «Incoterms» es marca registrada de la ICC.
+  </div>
+  <div class="site-footer">
+    <span>© <span id="year"></span> · <a href="https://jorgecalleja.dev" target="_blank" rel="noopener noreferrer">Diseño Web Málaga</a> · v0.1.0 (beta)</span>
   </div>
 </footer>
 
@@ -686,6 +692,7 @@ themeBtn.onclick=()=>{
 };
 
 /* ================= INIT ================= */
+document.getElementById("year").textContent = new Date().getFullYear();
 renderSegInputs();
 renderWizard();
 renderComparator();

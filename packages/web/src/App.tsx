@@ -95,6 +95,15 @@ export function App() {
           tipos varían por país y por partida arancelaria. No sustituye el contrato de compraventa ni el asesoramiento
           profesional. «Incoterms» es marca registrada de la ICC.
         </div>
+        <div className="site-footer">
+          <span>
+            © {new Date().getFullYear()} ·{" "}
+            <a href="https://jorgecalleja.dev" target="_blank" rel="noopener noreferrer">
+              Diseño Web Málaga
+            </a>{" "}
+            · v0.1.0 (beta)
+          </span>
+        </div>
       </footer>
     </>
   );
