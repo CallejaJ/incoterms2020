@@ -46,8 +46,7 @@ button{font-family:inherit}
 header{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
 .bar{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;margin-right:auto}
-.logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(150deg,var(--brand),var(--brand-ink));
-  display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.logo{width:30px;height:30px;display:grid;place-items:center;color:var(--ink);flex:none}
 .brand b{font-family:"Archivo";font-weight:800;font-size:17px;letter-spacing:.2px}
 .brand span{display:block;font-size:11px;color:var(--ink-faint);letter-spacing:.14em;text-transform:uppercase;margin-top:-2px}
 .controls{display:flex;align-items:center;gap:8px}

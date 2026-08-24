@@ -86,8 +86,7 @@ header{
 }
 .bar{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;margin-right:auto}
-.logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(150deg,var(--brand),var(--brand-ink));
-  display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.logo{width:30px;height:30px;display:grid;place-items:center;color:var(--ink);flex:none}
 .brand b{font-family:"Archivo";font-weight:800;font-size:17px;letter-spacing:.2px}
 .brand span{display:block;font-size:11px;color:var(--ink-faint);letter-spacing:.14em;text-transform:uppercase;margin-top:-2px}
 .controls{display:flex;align-items:center;gap:8px}
@@ -219,15 +218,10 @@ body.expert .expert-only{display:revert}
   <div class="bar">
     <div class="brand">
       <div class="logo" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9.2" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.3"/>
-          <g transform="rotate(45 12 12)">
-            <path d="M12 4 L14.4 12 L12 12 Z" fill="#ffffff"/>
-            <path d="M12 4 L9.6 12 L12 12 Z" fill="#bfe4ff"/>
-            <path d="M12 20 L14.4 12 L12 12 Z" fill="#5aa9dd"/>
-            <path d="M12 20 L9.6 12 L12 12 Z" fill="#3d86bd"/>
-          </g>
-          <circle cx="12" cy="12" r="1.5" fill="#ffffff"/>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L22 12 L12 22 L2 12 Z" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M8.5 15.5 L15.5 8.5 M15.5 8.5 L15.5 12.5 M15.5 8.5 L11.5 8.5"
+            stroke="var(--brand)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div><b>Rumbo</b><span>Incoterms 2020</span></div>
