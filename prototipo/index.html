@@ -66,7 +66,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--ground);color:var(--ink);
   font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -218,7 +218,18 @@ body.expert .expert-only{display:revert}
 <header>
   <div class="bar">
     <div class="brand">
-      <div class="logo">🧭</div>
+      <div class="logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9.2" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.3"/>
+          <g transform="rotate(45 12 12)">
+            <path d="M12 4 L14.4 12 L12 12 Z" fill="#ffffff"/>
+            <path d="M12 4 L9.6 12 L12 12 Z" fill="#bfe4ff"/>
+            <path d="M12 20 L14.4 12 L12 12 Z" fill="#5aa9dd"/>
+            <path d="M12 20 L9.6 12 L12 12 Z" fill="#3d86bd"/>
+          </g>
+          <circle cx="12" cy="12" r="1.5" fill="#ffffff"/>
+        </svg>
+      </div>
       <div><b>Rumbo</b><span>Incoterms 2020</span></div>
     </div>
     <div class="controls">

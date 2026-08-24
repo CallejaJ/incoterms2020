@@ -50,7 +50,18 @@ export function App() {
       <header>
         <div className="bar">
           <div className="brand">
-            <div className="logo">🧭</div>
+            <div className="logo" aria-hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9.2" fill="none" stroke="#ffffff" strokeOpacity="0.4" strokeWidth="1.3" />
+                <g transform="rotate(45 12 12)">
+                  <path d="M12 4 L14.4 12 L12 12 Z" fill="#ffffff" />
+                  <path d="M12 4 L9.6 12 L12 12 Z" fill="#bfe4ff" />
+                  <path d="M12 20 L14.4 12 L12 12 Z" fill="#5aa9dd" />
+                  <path d="M12 20 L9.6 12 L12 12 Z" fill="#3d86bd" />
+                </g>
+                <circle cx="12" cy="12" r="1.5" fill="#ffffff" />
+              </svg>
+            </div>
             <div><b>Rumbo</b><span>Incoterms 2020</span></div>
           </div>
           <div className="controls">
