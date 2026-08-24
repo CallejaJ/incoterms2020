@@ -159,12 +159,27 @@ table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surfac
 .rulecell{display:flex;align-items:center;gap:8px}
 .rulecell b{font-family:"IBM Plex Mono";font-size:14px}
 .rulecell small{color:var(--ink-faint);font-size:11px}
-.best-pill{font-size:10px;font-weight:700;color:#fff;background:var(--good);padding:2px 7px;border-radius:20px;letter-spacing:.04em}
+.best-pill{font-size:10px;font-weight:700;color:#fff;background:var(--good);padding:2px 7px;border-radius:20px;letter-spacing:.04em;white-space:nowrap;flex:none}
 .yourcost{font-weight:600}
 .riskcell{font-size:12px;color:var(--risk);font-weight:600}
 .callout{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--brand);
   border-radius:8px;padding:12px 14px;font-size:13px;color:var(--ink-soft);margin:16px 0}
 .callout b{color:var(--ink)}
+/* Tabla comparativa como tarjetas en móvil */
+@media(max-width:560px){
+  .cmp-table-wrap{border:0;background:transparent;box-shadow:none;border-radius:0;overflow:visible!important}
+  .cmp-table-wrap .chain-scroll{overflow:visible}
+  table.cmp{font-size:13px}
+  table.cmp thead{display:none}
+  table.cmp,table.cmp tbody{display:block}
+  table.cmp tr{display:block;border:1px solid var(--line);border-radius:12px;margin:0 0 10px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden}
+  table.cmp tbody tr:hover,table.cmp tr:hover{background:var(--surface)}
+  table.cmp tr.sel{border-color:var(--brand);box-shadow:0 0 0 2px color-mix(in srgb,var(--brand) 22%,transparent)}
+  table.cmp td{display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:right;border:0;border-top:1px solid var(--line);padding:9px 14px}
+  table.cmp td[data-label]::before{content:attr(data-label);color:var(--ink-faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;text-align:left;flex:none}
+  table.cmp td.rule-cell{display:block;text-align:left;border-top:0;background:var(--surface-2);padding:12px 14px}
+  table.cmp td.riskcell{text-align:right}
+}
 .term{border-bottom:1px dotted var(--ink-faint);cursor:help}
 footer{max-width:1120px;margin:0 auto;padding:0 20px 60px;color:var(--ink-faint);font-size:12px}
 .disclaimer{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;line-height:1.6}

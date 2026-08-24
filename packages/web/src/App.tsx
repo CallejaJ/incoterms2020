@@ -284,7 +284,7 @@ function Comparator(p: CmpProps) {
             })}
           </div>
 
-          <div className="panel" style={{ overflow: "hidden" }}>
+          <div className="panel cmp-table-wrap" style={{ overflow: "hidden" }}>
             <div className="chain-scroll">
               <table className="cmp">
                 <thead><tr>
@@ -296,15 +296,15 @@ function Comparator(p: CmpProps) {
                 <tbody>
                   {sorted.map((row) => (
                     <tr key={row.code} className={row.code === p.chainRule ? "sel" : ""} onClick={() => p.setChainRule(row.code)}>
-                      <td>
+                      <td className="rule-cell">
                         <div className="rulecell"><b>{row.code}</b>{row[yourKey] === bestVal && <span className="best-pill">Menor coste</span>}</div>
                         <small>{row.rule.name.split(" / ")[0]}</small>
                       </td>
-                      <td className="yourcost num">{fmt(row[yourKey])}</td>
-                      {p.detail === "expert" && <td className="num">{fmt(row.seller)}</td>}
-                      {p.detail === "expert" && <td className="num">{fmt(row.buyer)}</td>}
-                      <td className="num">{fmt(row.total)}</td>
-                      <td className="riskcell">{RISK_LABEL[row.code]}</td>
+                      <td className="yourcost num" data-label="Tu coste">{fmt(row[yourKey])}</td>
+                      {p.detail === "expert" && <td className="num" data-label="Vendedor">{fmt(row.seller)}</td>}
+                      {p.detail === "expert" && <td className="num" data-label="Comprador">{fmt(row.buyer)}</td>}
+                      <td className="num" data-label="Total operación">{fmt(row.total)}</td>
+                      <td className="riskcell" data-label="Riesgo pasa en">{RISK_LABEL[row.code]}</td>
                     </tr>
                   ))}
                 </tbody>

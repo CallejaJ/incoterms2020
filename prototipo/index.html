@@ -207,7 +207,7 @@ table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surfac
 .rulecell{display:flex;align-items:center;gap:8px}
 .rulecell b{font-family:"IBM Plex Mono";font-size:14px}
 .rulecell small{color:var(--ink-faint);font-size:11px}
-.best-pill{font-size:10px;font-weight:700;color:#fff;background:var(--good);padding:2px 7px;border-radius:20px;letter-spacing:.04em}
+.best-pill{font-size:10px;font-weight:700;color:#fff;background:var(--good);padding:2px 7px;border-radius:20px;letter-spacing:.04em;white-space:nowrap;flex:none}
 .yourcost{font-weight:600}
 .riskcell{font-size:12px;color:var(--risk);font-weight:600}
 .callout{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--brand);
@@ -215,6 +215,23 @@ table.cmp tbody tr.sel{background:color-mix(in srgb,var(--brand) 8%,var(--surfac
 .callout b{color:var(--ink)}
 
 /* Glosario / tooltip */
+/* Tabla comparativa como tarjetas en móvil */
+@media(max-width:560px){
+  .cmp-table-wrap{border:0;background:transparent;box-shadow:none;border-radius:0;overflow:visible!important}
+  .cmp-table-wrap .chain-scroll{overflow:visible}
+  table.cmp{font-size:13px}
+  table.cmp thead{display:none}
+  table.cmp,table.cmp tbody{display:block}
+  table.cmp tr{display:block;border:1px solid var(--line);border-radius:12px;margin:0 0 10px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden}
+  table.cmp tbody tr:hover{background:var(--surface)}
+  table.cmp tr.sel{border-color:var(--brand);box-shadow:0 0 0 2px color-mix(in srgb,var(--brand) 22%,transparent)}
+  table.cmp td{display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:right;border:0;border-top:1px solid var(--line);padding:9px 14px}
+  table.cmp td[data-label]::before{content:attr(data-label);color:var(--ink-faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;text-align:left;flex:none}
+  table.cmp td.rule-cell{display:block;text-align:left;border-top:0;background:var(--surface-2);padding:12px 14px}
+  table.cmp td.riskcell{text-align:right}
+  table.cmp td.expert-only{display:none}
+  body.expert table.cmp td.expert-only{display:flex}
+}
 .term{border-bottom:1px dotted var(--ink-faint);cursor:help}
 footer{max-width:1120px;margin:0 auto;padding:0 20px 60px;color:var(--ink-faint);font-size:12px}
 .disclaimer{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;line-height:1.6}
@@ -298,7 +315,7 @@ body.expert .expert-only{display:revert}
         </div>
         <div class="subhead" style="margin-top:0">Reglas a comparar</div>
         <div class="rulepick" id="rulepick"></div>
-        <div class="panel" style="overflow:hidden">
+        <div class="panel cmp-table-wrap" style="overflow:hidden">
           <div class="chain-scroll"><table class="cmp"><thead><tr>
             <th>Regla</th><th class="yourcost">Tu coste</th><th class="expert-only">Vendedor</th><th class="expert-only">Comprador</th><th>Total oper.</th><th>Riesgo pasa en</th>
           </tr></thead><tbody id="cmp-body"></tbody></table></div>
@@ -578,13 +595,13 @@ function renderTable(){
     const r=row.rule;
     const isBest = row[yourKey]===bestVal;
     return `<tr data-code="${row.code}" class="${row.code===state.chainRule?'sel':''}">
-      <td><div class="rulecell"><b>${row.code}</b>${isBest?'<span class="best-pill">Menor coste</span>':''}</div>
+      <td class="rule-cell"><div class="rulecell"><b>${row.code}</b>${isBest?'<span class="best-pill">Menor coste</span>':''}</div>
           <small>${r.name.split(" / ")[0]}</small></td>
-      <td class="yourcost num">${fmt(row[yourKey])}</td>
-      <td class="expert-only num">${fmt(row.seller)}</td>
-      <td class="expert-only num">${fmt(row.buyer)}</td>
-      <td class="num">${fmt(row.total)}</td>
-      <td class="riskcell">${RISK_LABEL[row.code]}</td>
+      <td class="yourcost num" data-label="Tu coste">${fmt(row[yourKey])}</td>
+      <td class="expert-only num" data-label="Vendedor">${fmt(row.seller)}</td>
+      <td class="expert-only num" data-label="Comprador">${fmt(row.buyer)}</td>
+      <td class="num" data-label="Total operación">${fmt(row.total)}</td>
+      <td class="riskcell" data-label="Riesgo pasa en">${RISK_LABEL[row.code]}</td>
     </tr>`;
   }).join("");
   $("#cmp-body").querySelectorAll("tr").forEach(tr=> tr.onclick=()=>{
