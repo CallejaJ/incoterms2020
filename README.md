@@ -1,6 +1,6 @@
 # Rumbo
 
-<div align="center">
+<div align="left">
     <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
     <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
 </div>
 
-<p align="center">
+<p align="left">
     <i>Asistente y comparador de Incoterms® 2020 para transitarios y usuarios con poco dominio de los términos de comercio internacional.</i>
 </p>
 
